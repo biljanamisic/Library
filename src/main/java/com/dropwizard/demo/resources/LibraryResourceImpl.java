@@ -1,12 +1,11 @@
 package com.dropwizard.demo.resources;
 
-import com.dropwizard.demo.api.BookDTO;
 import com.dropwizard.demo.dao.LibraryDao;
 import com.dropwizard.demo.model.Books;
-import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 
 public class LibraryResourceImpl implements LibraryResource {
@@ -18,12 +17,16 @@ public class LibraryResourceImpl implements LibraryResource {
     }
 
     @Override
-    public Books getBook(@PathParam("isbn") String isbn){
-        return  libraryDao.findByISBN(isbn);
+    public Books getBook(Long book_id){
+        Books book = libraryDao.findById(book_id);
+        if(book == null){
+            throw new WebApplicationException("Book with id "+ book_id +" is not found", Response.Status.NOT_FOUND);
+        }
+        return  book;
     }
 
     @Override
-    public Books saveBook(Books book) throws Exception{
+    public Books saveBook(Books book) {
         return libraryDao.create(book);
     }
 

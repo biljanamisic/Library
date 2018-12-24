@@ -10,18 +10,12 @@ public class LibraryDao extends AbstractDAO<Books> {
         super(factory);
     }
 
-    public Books findByISBN(String ISBN) {
-        return (get(ISBN));
+    public Books findById(Long book_id) {
+        return get(book_id);
     }
 
-    public Books create(Books book) throws Exception  {
-        Books book1;
-        try{
-             book1 =  persist(book);
-        }catch(Exception e){
-            throw new Exception(e);
-        }
-        return book1;
+    public Books create(Books book) {
+        return persist(book);
     }
 
 }

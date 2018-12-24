@@ -3,6 +3,7 @@ package com.dropwizard.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="books")
-//@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Books {
 
     public enum Genre {
@@ -29,7 +30,7 @@ public class Books {
     private String title;
 
     @Column(name = "numOfPages", nullable = false)
-    private int numOfPages;
+    private Integer numOfPages;
 
     @Column(name = "genre", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -57,6 +58,7 @@ public class Books {
     public void setBook_id(long id) {
         this.book_id = id;
     }
+
     @JsonProperty
     public String getTitle() {
         return title;
@@ -65,12 +67,13 @@ public class Books {
     public void setTitle(String title) {
         this.title = title;
     }
+
     @JsonProperty
-    public int getNumOfPages() {
+    public Integer getNumOfPages() {
         return numOfPages;
     }
 
-    public void setNumOfPages(int numOfPages) {
+    public void setNumOfPages(Integer numOfPages) {
         this.numOfPages = numOfPages;
     }
 
@@ -99,5 +102,49 @@ public class Books {
 
     public void setIsbn(String ISBN) {
         this.isbn = ISBN;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
+        result = prime * result + ((numOfPages == null) ? 0 : numOfPages.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Books other = (Books) obj;
+        if (isbn == null) {
+            if (other.isbn != null)
+                return false;
+        } else if (!isbn.equals(other.isbn))
+            return false;
+        if (numOfPages == null) {
+            if (other.numOfPages != null)
+                return false;
+        } else if (!numOfPages.equals(other.numOfPages))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Title: " + title + ", ISBN: " + isbn +
+                ", " + genre.name() + ", number of pages: " +
+                numOfPages + ", authors: " + authors;
     }
 }
