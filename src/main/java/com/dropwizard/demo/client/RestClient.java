@@ -55,6 +55,7 @@ public class RestClient {
 					logger.log(Priority.ERROR, "Error while trying to save book with isbn: " + books.getIsbn());
 					throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 				}
+				System.out.println("10 books saved: " + booksForSaving);
 			}
 		} catch (Exception e) {
 			logger.log(Priority.INFO, "Exception while trying to save books: " + e.getMessage());
